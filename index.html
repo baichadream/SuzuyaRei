@@ -251,6 +251,27 @@
             font-size: 24px;
             color: #00FFFF;
             text-shadow: 0 0 10px #00FFFF;
+            
+            
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 10px; /* Add some space between button and tooltip */
+        }
+        .button:hover .tooltip {
+            display: block;
         }
     </style>
 </head>
@@ -263,9 +284,11 @@
     <div>
         <a href="https://space.bilibili.com/675228698" target="_blank" class="button">
             <img src="图片/b站.ico" alt="Bilibili">
+            <span class="tooltip">我的B站</span>
         </a>
         <a href="javascript:void(0);" class="button" onclick="toggleModal()">
             <img src="图片/qq.ico" alt="QQ">
+            <span class="tooltip">我的QQ</span>
         </a>
     </div>
 
@@ -323,8 +346,7 @@
         const audio = new Audio();
         const songs = [
             { title: "无能", file: "music/无能.mp3", image: "music/无能.jpg" },
-            { title: "Chance", file: "music/chance.mp3", image: "/music/chance.jpg" },
-            { title: "Promise", file: "/music/Promise.mp3", image: "/music/promise.png" }
+            { title: "Chance", file: "music/chance.mp3", image: "/music/无能.jpg" }
         ];
         let currentSong = 0;
 
@@ -424,4 +446,70 @@
         });
     </script>
 </body>
+<script>
+     function toggleModal() {
+            var modal = document.querySelector('.modal');
+            if (modal.style.display === 'none' || modal.style.display === '') {
+                modal.style.display = 'block';
+            } else {
+                modal.style.display = 'none';
+            }
+        }
+// 计数器，用于记录点击次数
+let clickCount = 0;
+
+// 监听整个文档的点击事件
+document.addEventListener('click', function(event) {
+    // 增加点击计数
+    clickCount++;
+
+    // 创建一个新的圆圈元素
+    const circle = document.createElement('div');
+    circle.classList.add('click-circle');
+    const circleSize = 20; // 圆圈的初始尺寸
+    circle.style.width = circle.style.height = `${circleSize}px`;
+    // 将黑色圆圈改为蓝色
+    circle.style.backgroundColor = clickCount % 2 === 0 ? 'blue' : 'red';
+    circle.style.position = 'absolute';
+    circle.style.left = `${event.pageX - circleSize / 2}px`;
+    circle.style.top = `${event.pageY - circleSize / 2}px`;
+    circle.style.borderRadius = '50%';
+    circle.style.pointerEvents = 'none'; // 使圆圈不干扰其他元素的点击
+    circle.style.opacity = '1'; // 初始完全不透明
+
+    // 将圆圈添加到文档中
+    document.body.appendChild(circle);
+
+    // 动画效果，使圆圈飘向顶部并渐渐消失
+    const animationDuration = 2000; // 动画持续时间
+    setTimeout(() => {
+        const animateToTop = () => {
+            circle.style.transition = `all ${animationDuration}ms ease-in-out`;
+            circle.style.transform = `translateY(-${window.innerHeight - circleSize}px)`; // 移动到顶部
+            circle.style.opacity = '0'; // 渐渐消失
+        };
+        animateToTop();
+        setTimeout(() => {
+            circle.remove(); // 确保在动画结束后移除圆圈
+        }, animationDuration);
+    }, 10); // 稍微延迟以确保圆圈可见
+});
+
+// 添加样式规则以支持圆圈的动画效果
+document.head.appendChild(document.createElement('style')).textContent = `
+.click-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform, opacity; /* 提示浏览器该属性将会动画化 */
+}
+`;
+     function toggleModal() {
+    var modal = document.querySelector('.modal');
+    if (modal.style.display === 'none' || modal.style.display === '') {
+        modal.style.display = 'block';
+    } else {
+        modal.style.display = 'none';
+    }
+}</script>
 </html>
